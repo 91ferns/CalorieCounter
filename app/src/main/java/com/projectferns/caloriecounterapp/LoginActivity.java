@@ -77,10 +77,10 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.e("Start", "Started");
+
         settings = new ApplicationSettings(getApplicationContext());
 
-        if (settings.getIsUserLoggedIn()) {
+        if (settings.getIsUserLoggedIn() || !TextUtils.isEmpty(settings.getUserFirstName())) {
             launchMainActivity();
             return;
         }
@@ -164,7 +164,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        Toast.makeText(LoginActivity.this, email, Toast.LENGTH_LONG).show();
+
         boolean cancel = false;
         View focusView = null;
 
@@ -393,6 +393,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
             if (success) {
                 settings.setIsUserLoggedIn(true);
+                settings.setFirstName("Stephen");
                 launchMainActivity();
                 finish();
             } else {

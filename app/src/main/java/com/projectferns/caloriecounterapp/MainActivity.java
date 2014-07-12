@@ -16,7 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.projectferns.caloriecounterapp.R;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -36,17 +40,22 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      */
     ViewPager mViewPager;
 
+    ApplicationSettings settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toast.makeText(MainActivity.this, "Created", Toast.LENGTH_LONG).show();
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
+        settings = new ApplicationSettings(getApplicationContext());
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -139,7 +148,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return settings.getUserFirstName();
+                    //return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
@@ -178,6 +188,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView tv = (TextView) rootView.findViewById(R.id.section_label);
+            tv.setText("Hey there");
+            ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
+
+            ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+                    android.R.layout.simple_list_item_1);
+            for (int i = 0; i < 10; i++ )
+                adapter.add("Hey there Plom");
+
+            HomeListView.setAdapter(adapter);
+
             return rootView;
         }
     }
