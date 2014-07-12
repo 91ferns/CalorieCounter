@@ -7,16 +7,19 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.internal.view.menu.ListMenuItemView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -137,7 +140,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return HomeFragment.newInstance(position + 1);
+                    return new HomeFragment();
                 case 1:
                     return PlaceholderFragment.newInstance(2);
                 case 2:
@@ -169,29 +172,26 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
+    public void launchPostActivity(int id) {
+
+        Intent intent = new Intent(this, ListPostActivity.class);
+        intent.putExtra("POST_ITEM_ID", id);
+
+        startActivity(intent);
+        Log.e("Fin", "Finish");
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class HomeFragment extends Fragment {
+    public class HomeFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static HomeFragment newInstance(int sectionNumber) {
-            HomeFragment fragment = new HomeFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
         public HomeFragment() {
+
         }
 
         @Override
@@ -199,10 +199,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            //TextView tv = (TextView) rootView.findViewById(R.id.section_label);
-            //tv.setText("Hey there");
-
             ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
+
+            HomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView parentView, View childView,
+                                        int position, long id)
+                {
+                    Log.e("Clicked-item", Integer.toString(position));
+                    launchPostActivity(position);
+                }
+            });
 
             ArrayAdapter adapter = new ArrayAdapter<String>(
                     getActivity().getApplicationContext(),
