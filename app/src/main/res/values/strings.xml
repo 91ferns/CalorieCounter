@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">CalorieCounterApp</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main"></string>
     <string name="title_section1">Home</string>
     <string name="title_section2">Trends</string>
     <string name="title_section3">Friends</string>

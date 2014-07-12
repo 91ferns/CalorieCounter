@@ -51,5 +51,14 @@ public class APIContext {
         throws InterruptedException {
     }
 
+    private APICache cache;
+
+    public void setCache(APICache cache) {
+        this.cache = cache;
+    }
+
+    public boolean hasCache() {
+        return (cache != null);
+    }
 
 }

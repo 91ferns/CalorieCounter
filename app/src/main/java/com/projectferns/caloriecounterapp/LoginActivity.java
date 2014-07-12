@@ -34,6 +34,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.projectferns.caloriecounterapp.http.APIContext;
+import com.projectferns.caloriecounterapp.utils.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,14 +71,17 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private View mSignOutButtons;
     private View mLoginFormView;
 
+    private ApplicationSettings settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.e("Start", "Started");
+        settings = new ApplicationSettings(getApplicationContext());
 
-        if (isLoggedIn()) {
-            launchNewActivity();
+        if (settings.getIsUserLoggedIn()) {
+            launchMainActivity();
             return;
         }
         // Find the Google+ sign in button.
@@ -132,24 +136,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     }
 
     public final static String USER_FIRSTNAME = "com.projectferns.caloriecounterapp.USER_FIRSTNAME";
-    public final static String USER_DATA = "com.projectferns.caloriecounterapp.USER_DATA";
 
-    private static boolean isLoggedIn = false;
-
-    public boolean isLoggedIn() {
-        SharedPreferences settings = getSharedPreferences(USER_DATA, 0);
-        boolean silent = settings.getBoolean("isLoggedIn", false);
-        return silent;
-    }
-
-    public void setIsLoggedIn(boolean bool) {
-        SharedPreferences settings = getSharedPreferences(USER_DATA, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("isLoggedIn", bool);
-        Log.e("SETSETTINGS", "isLoggedIn true");
-    }
-
-    public void launchNewActivity() {
+    public void launchMainActivity() {
 
         Intent intent = new Intent(this, MainActivity.class);
         String name = "Awesome";
@@ -182,7 +170,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!Validator.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -193,7 +181,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!Validator.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -211,15 +199,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
 
         }
-    }
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**
@@ -388,7 +367,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            Log.i("Test", "Testest");
             try {
                 // Simulate network access.
                 APIContext http = new APIContext(getString(R.string.api_client_id));
@@ -405,8 +383,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 }
             }
 
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -415,8 +392,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
-                setIsLoggedIn(true);
-                launchNewActivity();
+                settings.setIsUserLoggedIn(true);
+                launchMainActivity();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
