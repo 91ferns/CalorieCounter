@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.TextView;
 
 import com.projectferns.caloriecounterapp.R;
 
@@ -19,13 +20,17 @@ public class ListPostActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_post);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-    }
 
+        if (savedInstanceState == null) {
+            PlaceholderFragment frag = new PlaceholderFragment();
+
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, frag)
+                    .commit();
+
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,6 +56,15 @@ public class ListPostActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        @Override
+        public void onActivityCreated (Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+
+            TextView tv = (TextView) getView().findViewById(R.id.top_text);
+            int x = getActivity().getIntent().getIntExtra("POST_ITEM_ID", 0);
+            tv.setText(Integer.toString(x));
+        }
+
         public PlaceholderFragment() {
         }
 
@@ -58,6 +72,7 @@ public class ListPostActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_list_post, container, false);
+
             return rootView;
         }
     }

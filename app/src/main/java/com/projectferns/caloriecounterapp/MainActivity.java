@@ -172,18 +172,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
-    public void launchPostActivity(int id) {
-
-        Intent intent = new Intent(this, ListPostActivity.class);
-        intent.putExtra("POST_ITEM_ID", id);
-
-        startActivity(intent);
-        Log.e("Fin", "Finish");
-    }
     /**
      * A placeholder fragment containing a simple view.
      */
-    public class HomeFragment extends Fragment {
+    public static class HomeFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -194,13 +186,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
         }
 
+        public void launchPostActivity(int id) {
+
+            Intent intent = new Intent(getActivity(), ListPostActivity.class);
+            intent.putExtra("POST_ITEM_ID", id);
+
+            startActivity(intent);
+            Log.e("Fin", "Finish");
+        }
+
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        public void onActivityCreated (Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
 
-            ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
-
+            ListView HomeListView = (ListView) getView().findViewById(R.id.home_listview);
             HomeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView parentView, View childView,
                                         int position, long id)
@@ -209,6 +208,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     launchPostActivity(position);
                 }
             });
+
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
 
             ArrayAdapter adapter = new ArrayAdapter<String>(
                     getActivity().getApplicationContext(),
