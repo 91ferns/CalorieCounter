@@ -10,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.internal.view.menu.ListMenuItemView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -134,7 +135,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return HomeFragment.newInstance(position + 1);
+                case 1:
+                    return PlaceholderFragment.newInstance(2);
+                case 2:
+                default:
+                    return PlaceholderFragment.newInstance(3);
+            }
+
         }
 
         @Override
@@ -156,6 +166,55 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
+        }
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class HomeFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static HomeFragment newInstance(int sectionNumber) {
+            HomeFragment fragment = new HomeFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public HomeFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            //TextView tv = (TextView) rootView.findViewById(R.id.section_label);
+            //tv.setText("Hey there");
+
+            ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
+
+            ArrayAdapter adapter = new ArrayAdapter<String>(
+                    getActivity().getApplicationContext(),
+                    android.R.layout.simple_list_item_1);
+
+            for (int i = 0; i < 10; i++ ) {
+                adapter.add("Hey there Plom");
+            }
+
+            HomeListView.setAdapter(adapter);
+
+            return rootView;
         }
     }
 
@@ -186,18 +245,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
             TextView tv = (TextView) rootView.findViewById(R.id.section_label);
             tv.setText("Hey there");
-            ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
-
-            ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                    android.R.layout.simple_list_item_1);
-            for (int i = 0; i < 10; i++ )
-                adapter.add("Hey there Plom");
-
-            HomeListView.setAdapter(adapter);
 
             return rootView;
         }
