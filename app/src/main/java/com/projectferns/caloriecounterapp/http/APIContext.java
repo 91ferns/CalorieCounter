@@ -1,5 +1,6 @@
 package com.projectferns.caloriecounterapp.http;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import org.apache.http.client.HttpClient;
@@ -49,6 +50,7 @@ public class APIContext {
 
     public void Connect()
         throws InterruptedException {
+
     }
 
     private APICache cache;

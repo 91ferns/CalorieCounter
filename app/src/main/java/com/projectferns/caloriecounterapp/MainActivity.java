@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -93,6 +94,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         return true;
     }
 
+    public void LaunchNewPostActivity() {
+
+        Intent intent = new Intent(this, PostAddActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -100,6 +107,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_add) {
+            LaunchNewPostActivity();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -204,6 +215,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     launchPostActivity(position);
                 }
             });
+
+
 
         }
 
