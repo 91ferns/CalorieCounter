@@ -19,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import com.projectferns.caloriecounterapp.models.Author;
+import com.projectferns.caloriecounterapp.models.ListPost;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -233,13 +236,31 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
             ListView HomeListView = (ListView) rootView.findViewById(R.id.home_listview);
 
-            ArrayAdapter adapter = new ArrayAdapter<String>(
-                    getActivity().getApplicationContext(),
-                    android.R.layout.simple_list_item_1);
+            ArrayList<ListPost> list = new ArrayList<ListPost>();
 
-            for (int i = 0; i < 10; i++ ) {
-                adapter.add("Hey there Plom");
+            String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                    "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                    "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+                    "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+                    "Android", "iPhone", "WindowsMobile" };
+
+            ListPost x;
+            Author a;
+
+
+            for (int i = 0; i < values.length; i++ ) {
+                a = new Author(i);
+                x = new ListPost(i, a);
+                x.setTitle(values[i]);
+                x.setCalories(100);
+                x.setMessage(values[i]);
+                list.add(x);
             }
+
+            ListPostsAdapter adapter = new ListPostsAdapter(
+                    getActivity().getApplicationContext(),
+                    R.layout.list_individal_post, list);
+
 
             HomeListView.setAdapter(adapter);
 
