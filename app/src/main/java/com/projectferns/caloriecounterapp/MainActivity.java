@@ -100,6 +100,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         startActivity(intent);
     }
 
+    public void LaunchSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -107,6 +112,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            LaunchSettingsActivity();
             return true;
         }
         if (id == R.id.action_add) {
